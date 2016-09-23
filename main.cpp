@@ -7,11 +7,10 @@
 #include "jacobi.h"
 
 using namespace std;
-using namespace arma;
 
 int main()
 {
-    int n = 10;
+    int n = 5;
 
     jacobi_method(n);
 

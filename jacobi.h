@@ -3,5 +3,6 @@
 
 void jacobi_method(int n);
 double max_offdiagonal(int n, arma::mat A, int *k, int *l);
+void rotate(int n, arma::mat &A, arma::mat &R, int k, int l);
 
 #endif // JACOBI_METHOD_H
