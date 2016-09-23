@@ -25,5 +25,8 @@
 
 # Executables
 *.exe
+
+# Other
+.DS_Store
 *.out
 *.app
