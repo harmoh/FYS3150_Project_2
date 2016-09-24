@@ -81,18 +81,7 @@ void jacobi_method(int n)
         cout << eigenvalues(i) << endl;
     }
 
-    vec eigval;
-    mat eigvec;
-
-    eig_sym(eigval, eigvec, A);  // find eigenvalues/eigenvectors
-    eigval = sort(eigval);
-
-    cout << "\neigval:\n";
-    for(int i = 0; i < 3; i++)
-    {
-        cout << eigval(i) << endl;
-    }
-    //cout << "\neigvec:\n" << eigvec << endl;
+    eigenvalues_arma(A);
 }
 
 double max_offdiagonal(int n, mat A, int *k, int *l)
@@ -165,4 +154,20 @@ void rotate(int n, mat &A, mat&R, int k, int l)
         R(i,k) = r_ik * c - r_il * s;
         R(i,l) = r_il * c + r_ik * s;
     }
+}
+
+void eigenvalues_arma(mat &A)
+{
+    vec eigval;
+    mat eigvec;
+
+    eig_sym(eigval, eigvec, A);  // find eigenvalues/eigenvectors
+    eigval = sort(eigval);
+
+    cout << "\neigval:\n";
+    for(int i = 0; i < 3; i++)
+    {
+        cout << eigval(i) << endl;
+    }
+    //cout << "\neigvec:\n" << eigvec << endl;
 }
