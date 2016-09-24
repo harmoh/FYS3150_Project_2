@@ -7,40 +7,39 @@ using namespace arma;
 // Main function for performing the Jacobi algorithm
 void jacobi_method(int n)
 {
-    mat A = zeros(n - 1, n - 1);
-    mat R(n - 1, n - 1);
+    mat A = zeros(n, n);
+    mat R(n, n);
 
     double rho_max, rho_min;
-    vec rho(n);
-    vec V(n - 1);
-    vec d(n - 1);
+    vec rho(n + 1);
+    vec V(n);
+    vec d(n);
     double e;
     rho_min = 0;
     rho_max = 5.0;
 
     double h = (rho_max - rho_min) / n;
-    e = -1/(h*h);
+    e = -1.0/(h*h);
 
-    for(int i = 0; i < n - 1; i++)
+    for(int i = 0; i < n + 1; i++)
     {
         rho(i) = rho(0) + i * h;
     }
-    for(int i = 0; i < n - 1; i++)
+    for(int i = 0; i < n; i++)
     {
-        V(i) = rho(i) * rho(i); // Non-interaction case
+        V(i) = rho(i + 1) * rho(i + 1); // Non-interaction case
         d(i) = 2/(h*h) + V(i);
-
     }
 
     // Initialize A
     A(0,0) = d(0);
-    for(int i = 1; i < n - 1; i++)
+    for(int i = 1; i < n; i++)
     {
         A(i,i) = d(i);
         A(i,i-1) = e;
         A(i-1,i) = e;
     }
-    //cout << "A after:\n" << A << endl;
+    cout << "A after:\n" << A << endl;
     cout << "rho:\n" << rho << endl;
 
     int k = 0;
@@ -52,13 +51,14 @@ void jacobi_method(int n)
     double max_diagonal = max_offdiagonal(n, A, &k, &l);
     cout << "Max: " << max_diagonal << endl;
 
-    double epsilon = 1e-8;
+    double epsilon = 1.0e-8;
     double max_iterations = n * n * n;
     int iterations = 0;
 
     while(max_diagonal > epsilon && iterations < max_iterations)
     {
         max_diagonal = max_offdiagonal(n, A, &k, &l);
+        cout << "Max: " << max_diagonal << endl;
 
         rotate(n, A, R, k, l);
 
@@ -66,24 +66,33 @@ void jacobi_method(int n)
     }
 
     //cout << "R:\n" << R << endl;
-    cout << "Number of iterations: " << iterations << endl;
+    cout << "\nNumber of iterations: " << iterations << endl;
 
     vec eigenvalues(n);
-    for(int i = 0; i < n - 1; i++)
+    for(int i = 0; i < n; i++)
     {
         eigenvalues(i) = R(i,i);
     }
     eigenvalues = sort(eigenvalues);
 
-    cout << "eigenvalues:\n" << eigenvalues << endl;
+    cout << "\neigenvalues:\n";
+    for(int i = 0; i < 3; i++)
+    {
+        cout << eigenvalues(i) << endl;
+    }
 
     vec eigval;
     mat eigvec;
 
     eig_sym(eigval, eigvec, A);  // find eigenvalues/eigenvectors
     eigval = sort(eigval);
-    cout << "eigval:\n" << eigval << endl;
-    //cout << "eigvec:\n" << eigvec << endl;
+
+    cout << "\neigval:\n";
+    for(int i = 0; i < 3; i++)
+    {
+        cout << eigval(i) << endl;
+    }
+    //cout << "\neigvec:\n" << eigvec << endl;
 }
 
 double max_offdiagonal(int n, mat A, int *k, int *l)
@@ -112,16 +121,16 @@ void rotate(int n, mat &A, mat&R, int k, int l)
     {
         double t, tau;
         tau = (A(k,k) - A(l,l)) / (2 * A(k,l));
-        if(tau > 0)
+        if(tau >= 0)
         {
-            t = 1.0 / (tau + sqrt(1 + tau * tau));
+            t = 1.0 / (fabs(tau) + sqrt(1 + tau * tau));
         }
         else
         {
-            t = -1.0 / (-tau + sqrt(1 + tau * tau));
+            t = -1.0 / (fabs(tau) + sqrt(1 + tau * tau));
         }
 
-        c = 1.0 / (sqrt(1 + t * t));
+        c = 1.0 / (sqrt(1.0 + t * t));
         s = c * t;
     }
     else
@@ -146,9 +155,9 @@ void rotate(int n, mat &A, mat&R, int k, int l)
         {
             a_ik = A(i,k);
             a_il = A(i,l);
-            A(i,k) = a_ik * c - A(i,l) * s;
+            A(i,k) = a_ik * c - a_il * s;
             A(k,i) = A(i,k);
-            A(i,l) = a_il * c + A(i,k) * s;
+            A(i,l) = a_il * c + a_ik * s;
             A(l,i) = A(i,l);
         }
         r_ik = R(i,k);
