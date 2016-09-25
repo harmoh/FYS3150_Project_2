@@ -7,16 +7,10 @@
 #include "jacobi.h"
 
 using namespace std;
-using namespace arma;
 
 int main()
 {
-
-    for(int i = 1; i < 8; i++)
-    {
-        int n = 50 * i;
-        jacobi_method(n);
-    }
+    jacobi_method();
 
     return 0;
 }

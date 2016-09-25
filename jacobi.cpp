@@ -1,95 +1,134 @@
+#include <iostream>
+#include <fstream>
+#include <iomanip>
 #include <cmath>
 #include <armadillo>
 #include "jacobi.h"
 
+using namespace std;
 using namespace arma;
+ofstream ofile;
 
 // Main function for performing the Jacobi algorithm
-void jacobi_method(int n)
+void jacobi_method()
 {
-    mat A = zeros(n-1, n-1);
-    mat R(n-1, n-1);
-
-    double rho_max, rho_min;
-    vec rho(n+1);
-    vec V(n-1);
-    vec d(n-1);
-    double e;
-    rho_min = 0;
-    rho_max = 5.0;
-
-    double h = (rho_max - rho_min) / n;
-    e = -1.0/(h*h);
-
-    for(int i = 0; i < n+1; i++)
-    {
-        rho(i) = rho(0) + i * h;
-    }
-    for(int i = 0; i < n-1; i++)
-    {
-        V(i) = rho(i + 1) * rho(i + 1); // Non-interaction case
-        d(i) = 2/(h*h) + V(i);
-    }
-
-    // Initialize A
-    A(n-2,n-2) = d(n-2);
-    for(int i = 0; i < n-2; i++)
-    {
-        A(i,i) = d(i);
-        A(i,i+1) = e;
-        A(i+1,i) = e;
-    }
-
-    // Initializing eigenvalue matrix
-    R.eye();
-
-    int k = 0;
-    int l = 0;
-
+    // Initial variables
+    double rho_min = 0;
+    double rho_max = 5.0;
     double epsilon = 1.0e-8;
-    double max_iterations = n * n * n;
-    int iterations = 0;
 
-    double max_diagonal = max_offdiagonal(n-1, A, &k, &l);
-    while(max_diagonal > epsilon && iterations < max_iterations)
+    string outfilename = "Results_Jacobi.txt";
+    ofile.open(outfilename);
+    ofile << setiosflags(ios::showpoint | ios::uppercase);
+    ofile << "Rho max is set to: " << rho_max << " and max error is set to: " <<
+             epsilon << ". " << endl;
+    ofile << " n:       Eigenvalues:                 Time (Jacobi):    " <<
+             "Time (Armadillo):" << "   Iterations:" << endl;
+
+    // Loop over different n-values
+    for(int i = 1; i < 8; i++)
     {
-        max_diagonal = max_offdiagonal(n-1, A, &k, &l);
+        int n = 50 * i;
+        mat A = zeros(n-1, n-1);
+        mat R(n-1, n-1);
 
-        rotate(n-1, A, R, k, l);
+        vec rho(n+1);
+        vec V(n-1);
+        vec d(n-1);
 
-        iterations++;
+        double h = (rho_max - rho_min) / n;
+        double e = -1.0/(h*h);
+
+        for(int i = 0; i < n+1; i++)
+        {
+            rho(i) = rho(0) + i * h;
+        }
+        for(int i = 0; i < n-1; i++)
+        {
+            V(i) = rho(i+1) * rho(i+1); // Non-interaction case
+            d(i) = 2/(h*h) + V(i);
+        }
+
+        // Initialize A
+        A(n-2,n-2) = d(n-2);
+        for(int i = 0; i < n-2; i++)
+        {
+            A(i,i) = d(i);
+            A(i,i+1) = e;
+            A(i+1,i) = e;
+        }
+
+        // Initializing eigenvalue matrix
+        R.eye();
+
+        int k = 0;
+        int l = 0;
+
+        double max_iterations = n*n*n;
+        int iterations = 0;
+
+        clock_t start_jacobi, finish_jacobi, start_arma, finish_arma;
+        start_jacobi = clock();
+        double max_diagonal = max_offdiagonal(n-1, A, &k, &l);
+        while(max_diagonal > epsilon && iterations < max_iterations)
+        {
+            max_diagonal = max_offdiagonal(n-1, A, &k, &l);
+            rotate(n-1, A, R, k, l);
+            iterations++;
+        }
+        finish_jacobi = clock();
+        double time_jacobi = (finish_jacobi - start_jacobi)/(double)CLOCKS_PER_SEC;
+
+        //cout << "\nNumber of iterations:\t" << iterations << endl;
+        //cout << "Time (Jacobi):\t" << time_jacobi << " s." << endl;
+
+        vec eigenvalues(n-1);
+        for(int i = 0; i < n-1; i++)
+        {
+            eigenvalues(i) = A(i,i);
+        }
+        eigenvalues = sort(eigenvalues);
+
+//        cout << "Eigenvalues:\t";
+//        for(int i = 0; i < 3; i++)
+//        {
+//            cout << eigenvalues(i) << "\t";
+//        }
+//        cout << endl;
+
+        mat B = A;
+
+        start_arma = clock();
+        eigenvalues_arma(B);
+        finish_arma = clock();
+        double time_arma = (finish_arma - start_arma)/(double)CLOCKS_PER_SEC;
+        //cout << "Time (Arma):\t" << time_arma << " s." << endl;
+
+        ofile << setw(5) << n << setw(5);
+        ofile << "{" << setprecision(6) << eigenvalues(0) << ", ";
+        ofile << setprecision(6) << eigenvalues(1) << ", ";
+        ofile << setprecision(6) << eigenvalues(2) << "}";
+        ofile << setw(14) << setprecision(6) << time_jacobi << " s.";
+        ofile << setw(18) << setprecision(6) << time_arma << " s.";
+        ofile << setw(12) << iterations << endl;
+
+        cout << "n = " << n << endl;
     }
-
-    cout << "\nNumber of iterations: " << iterations << endl;
-
-    vec eigenvalues(n-1);
-    for(int i = 0; i < n-1; i++)
-    {
-        eigenvalues(i) = A(i,i);
-    }
-    eigenvalues = sort(eigenvalues);
-
-    cout << "Eigenvalues:\t";
-    for(int i = 0; i < 3; i++)
-    {
-        cout << eigenvalues(i) << "\t";
-    }
-    cout << endl;
-
-    mat B = A;
-    eigenvalues_arma(B);
+    ofile.close();
 }
 
 double max_offdiagonal(int n, mat A, int *k, int *l)
 {
     double max = 0;
+    double a_ij;
     for(int i = 0; i < n; i++)
     {
         for(int j = i + 1; j < n; j++)
         {
-            if(fabs(A(i,j)) > max)
+            a_ij = fabs(A(i,j));
+            if(a_ij > max)
             {
-                max = fabs(A(i,j));
+                max = a_ij;
                 *k = i;
                 *l = j;
             }
