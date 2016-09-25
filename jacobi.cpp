@@ -7,13 +7,13 @@ using namespace arma;
 // Main function for performing the Jacobi algorithm
 void jacobi_method(int n)
 {
-    mat A = zeros(n, n);
-    mat R(n, n);
+    mat A = zeros(n-1, n-1);
+    mat R(n-1, n-1);
 
     double rho_max, rho_min;
-    vec rho(n + 1);
-    vec V(n);
-    vec d(n);
+    vec rho(n+1);
+    vec V(n-1);
+    vec d(n-1);
     double e;
     rho_min = 0;
     rho_max = 5.0;
@@ -21,11 +21,11 @@ void jacobi_method(int n)
     double h = (rho_max - rho_min) / n;
     e = -1.0/(h*h);
 
-    for(int i = 0; i < n + 1; i++)
+    for(int i = 0; i < n+1; i++)
     {
         rho(i) = rho(0) + i * h;
     }
-    for(int i = 0; i < n; i++)
+    for(int i = 0; i < n-1; i++)
     {
         V(i) = rho(i + 1) * rho(i + 1); // Non-interaction case
         d(i) = 2/(h*h) + V(i);
@@ -33,7 +33,7 @@ void jacobi_method(int n)
 
     // Initialize A
     A(0,0) = d(0);
-    for(int i = 1; i < n; i++)
+    for(int i = 1; i < n-1; i++)
     {
         A(i,i) = d(i);
         A(i,i-1) = e;
@@ -42,11 +42,11 @@ void jacobi_method(int n)
     cout << "A after:\n" << A << endl;
     cout << "rho:\n" << rho << endl;
 
-    int k = 0;
-    int l = 0;
-
     // Initializing eigenvalue matrix
     R.eye();
+
+    int k = 0;
+    int l = 0;
 
     double max_diagonal = max_offdiagonal(n, A, &k, &l);
     cout << "Max: " << max_diagonal << endl;
@@ -57,10 +57,10 @@ void jacobi_method(int n)
 
     while(max_diagonal > epsilon && iterations < max_iterations)
     {
-        max_diagonal = max_offdiagonal(n, A, &k, &l);
+        max_diagonal = max_offdiagonal(n-1, A, &k, &l);
         cout << "Max: " << max_diagonal << endl;
 
-        rotate(n, A, R, k, l);
+        rotate(n-1, A, R, k, l);
 
         iterations++;
     }
@@ -68,8 +68,8 @@ void jacobi_method(int n)
     //cout << "R:\n" << R << endl;
     cout << "\nNumber of iterations: " << iterations << endl;
 
-    vec eigenvalues(n);
-    for(int i = 0; i < n; i++)
+    vec eigenvalues(n-1);
+    for(int i = 0; i < n-1; i++)
     {
         eigenvalues(i) = R(i,i);
     }
@@ -89,7 +89,7 @@ double max_offdiagonal(int n, mat A, int *k, int *l)
     double max = 0;
     for(int i = 0; i < n; i++)
     {
-        for(int j = i + 1; j < n; j++)
+        for(int j = i + 1; j < n-1; j++)
         {
             if(fabs(A(i,j)) > max)
             {
@@ -104,12 +104,11 @@ double max_offdiagonal(int n, mat A, int *k, int *l)
 
 void rotate(int n, mat &A, mat&R, int k, int l)
 {
-    double s, c;
+    double s, c, t, tau;;
 
     if(A(k,l) != 0.0)
     {
-        double t, tau;
-        tau = (A(k,k) - A(l,l)) / (2 * A(k,l));
+        tau = (A(l,l) - A(k,k)) / (2 * A(k,l));
         if(tau >= 0)
         {
             t = 1.0 / (fabs(tau) + sqrt(1 + tau * tau));
@@ -133,10 +132,10 @@ void rotate(int n, mat &A, mat&R, int k, int l)
     a_ll = A(l,l);
 
     // Changing the matrix elements with indices k and l
-    A(k,l) = 0;
-    A(l,k) = 0;
     A(k,k) = a_kk * c * c - 2 * A(k,l) * c * s + a_ll * s * s;
     A(l,l) = a_ll * c * c + 2 * A(k,l) * c * s + a_kk * s * s;
+    A(k,l) = 0;
+    A(l,k) = 0;
 
     for(int i = 0; i < n; i++)
     {
