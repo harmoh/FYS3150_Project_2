@@ -32,15 +32,13 @@ void jacobi_method(int n)
     }
 
     // Initialize A
-    A(0,0) = d(0);
-    for(int i = 1; i < n-1; i++)
+    A(n-2,n-2) = d(n-2);
+    for(int i = 0; i < n-2; i++)
     {
         A(i,i) = d(i);
-        A(i,i-1) = e;
-        A(i-1,i) = e;
+        A(i,i+1) = e;
+        A(i+1,i) = e;
     }
-    cout << "A after:\n" << A << endl;
-    cout << "rho:\n" << rho << endl;
 
     // Initializing eigenvalue matrix
     R.eye();
@@ -48,40 +46,38 @@ void jacobi_method(int n)
     int k = 0;
     int l = 0;
 
-    double max_diagonal = max_offdiagonal(n, A, &k, &l);
-    cout << "Max: " << max_diagonal << endl;
-
     double epsilon = 1.0e-8;
     double max_iterations = n * n * n;
     int iterations = 0;
 
+    double max_diagonal = max_offdiagonal(n-1, A, &k, &l);
     while(max_diagonal > epsilon && iterations < max_iterations)
     {
         max_diagonal = max_offdiagonal(n-1, A, &k, &l);
-        cout << "Max: " << max_diagonal << endl;
 
         rotate(n-1, A, R, k, l);
 
         iterations++;
     }
 
-    //cout << "R:\n" << R << endl;
     cout << "\nNumber of iterations: " << iterations << endl;
 
     vec eigenvalues(n-1);
     for(int i = 0; i < n-1; i++)
     {
-        eigenvalues(i) = R(i,i);
+        eigenvalues(i) = A(i,i);
     }
     eigenvalues = sort(eigenvalues);
 
-    cout << "\neigenvalues:\n";
+    cout << "Eigenvalues:\t";
     for(int i = 0; i < 3; i++)
     {
-        cout << eigenvalues(i) << endl;
+        cout << eigenvalues(i) << "\t";
     }
+    cout << endl;
 
-    eigenvalues_arma(A);
+    mat B = A;
+    eigenvalues_arma(B);
 }
 
 double max_offdiagonal(int n, mat A, int *k, int *l)
@@ -89,7 +85,7 @@ double max_offdiagonal(int n, mat A, int *k, int *l)
     double max = 0;
     for(int i = 0; i < n; i++)
     {
-        for(int j = i + 1; j < n-1; j++)
+        for(int j = i + 1; j < n; j++)
         {
             if(fabs(A(i,j)) > max)
             {
@@ -155,18 +151,11 @@ void rotate(int n, mat &A, mat&R, int k, int l)
     }
 }
 
-void eigenvalues_arma(mat &A)
+void eigenvalues_arma(mat &B)
 {
     vec eigval;
     mat eigvec;
 
-    eig_sym(eigval, eigvec, A);  // find eigenvalues/eigenvectors
+    eig_sym(eigval, eigvec, B);  // find eigenvalues/eigenvectors
     eigval = sort(eigval);
-
-    cout << "\neigval:\n";
-    for(int i = 0; i < 3; i++)
-    {
-        cout << eigval(i) << endl;
-    }
-    //cout << "\neigvec:\n" << eigvec << endl;
 }
