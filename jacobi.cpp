@@ -79,9 +79,6 @@ void jacobi_method()
         finish_jacobi = clock();
         double time_jacobi = (finish_jacobi - start_jacobi)/(double)CLOCKS_PER_SEC;
 
-        //cout << "\nNumber of iterations:\t" << iterations << endl;
-        //cout << "Time (Jacobi):\t" << time_jacobi << " s." << endl;
-
         vec eigenvalues(n-1);
         for(int i = 0; i < n-1; i++)
         {
@@ -89,20 +86,13 @@ void jacobi_method()
         }
         eigenvalues = sort(eigenvalues);
 
-//        cout << "Eigenvalues:\t";
-//        for(int i = 0; i < 3; i++)
-//        {
-//            cout << eigenvalues(i) << "\t";
-//        }
-//        cout << endl;
-
+        // Copy the matrix for use with Armadillo
         mat B = A;
 
         start_arma = clock();
         eigenvalues_arma(B);
         finish_arma = clock();
         double time_arma = (finish_arma - start_arma)/(double)CLOCKS_PER_SEC;
-        //cout << "Time (Arma):\t" << time_arma << " s." << endl;
 
         ofile << setw(5) << n << setw(5);
         ofile << "{" << setprecision(6) << eigenvalues(0) << ", ";
@@ -111,8 +101,6 @@ void jacobi_method()
         ofile << setw(14) << setprecision(6) << time_jacobi << " s.";
         ofile << setw(18) << setprecision(6) << time_arma << " s.";
         ofile << setw(12) << iterations << endl;
-
-        cout << "n = " << n << endl;
     }
     ofile.close();
 }
