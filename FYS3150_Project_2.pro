@@ -7,9 +7,11 @@ INCLUDEPATH += /usr/local/include
 LIBS += -L/usr/local/lib
 
 SOURCES += main.cpp \
-    jacobi.cpp
+    jacobi.cpp \
+    interacting_case.cpp
 
 LIBS += -larmadillo -llapack -lblas
 
 HEADERS += \
-    jacobi.h
+    jacobi.h \
+    interacting_case.h

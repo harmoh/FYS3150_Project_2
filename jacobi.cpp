@@ -33,6 +33,7 @@ void jacobi_method()
         mat R(n-1, n-1);
 
         vec rho(n+1);
+        rho(0) = rho_min;
         vec V(n-1);
         vec d(n-1);
 
@@ -150,6 +151,7 @@ void rotate(int n, mat &A, mat&R, int k, int l)
         s = 0;
     }
 
+    // Declare and initialize local variables
     double a_kk, a_ll, a_ik, a_il, r_ik, r_il;
     a_kk = A(k,k);
     a_ll = A(l,l);
@@ -157,9 +159,12 @@ void rotate(int n, mat &A, mat&R, int k, int l)
     // Changing the matrix elements with indices k and l
     A(k,k) = a_kk * c * c - 2 * A(k,l) * c * s + a_ll * s * s;
     A(l,l) = a_ll * c * c + 2 * A(k,l) * c * s + a_kk * s * s;
+
+    // Manually set elements to zero
     A(k,l) = 0;
     A(l,k) = 0;
 
+    // Perform rotation
     for(int i = 0; i < n; i++)
     {
         if(i != k && i != l)
