@@ -7,7 +7,7 @@
 
 using namespace std;
 using namespace arma;
-ofstream ofile;
+ofstream ofile_b;
 
 // Main function for performing the Jacobi algorithm
 void jacobi_method()
@@ -18,12 +18,12 @@ void jacobi_method()
     double epsilon = 1.0e-8;
 
     string outfilename = "Results_Jacobi.txt";
-    ofile.open(outfilename);
-    ofile << setiosflags(ios::showpoint | ios::uppercase);
-    ofile << "Rho max is set to: " << rho_max << " and max error is set to: " <<
-             epsilon << ". " << endl;
-    ofile << " n:       Eigenvalues:                 Time (Jacobi):    " <<
-             "Time (Armadillo):" << "   Iterations:" << endl;
+    ofile_b.open(outfilename);
+    ofile_b << setiosflags(ios::showpoint | ios::uppercase);
+    ofile_b << "Rho max is set to: " << rho_max << " and max error is set to: " <<
+               epsilon << ". " << endl;
+    ofile_b << " n:       Eigenvalues:                 Time (Jacobi):    " <<
+               "Time (Armadillo):" << "   Iterations:" << endl;
 
     // Loop over different n-values
     for(int i = 1; i < 8; i++)
@@ -95,15 +95,15 @@ void jacobi_method()
         finish_arma = clock();
         double time_arma = (finish_arma - start_arma)/(double)CLOCKS_PER_SEC;
 
-        ofile << setw(5) << n << setw(5);
-        ofile << "{" << setprecision(6) << eigenvalues(0) << ", ";
-        ofile << setprecision(6) << eigenvalues(1) << ", ";
-        ofile << setprecision(6) << eigenvalues(2) << "}";
-        ofile << setw(14) << setprecision(6) << time_jacobi << " s.";
-        ofile << setw(18) << setprecision(6) << time_arma << " s.";
-        ofile << setw(12) << iterations << endl;
+        ofile_b << setw(5) << n << setw(5);
+        ofile_b << "{" << setprecision(6) << eigenvalues(0) << ", ";
+        ofile_b << setprecision(6) << eigenvalues(1) << ", ";
+        ofile_b << setprecision(6) << eigenvalues(2) << "}";
+        ofile_b << setw(14) << setprecision(6) << time_jacobi << " s.";
+        ofile_b << setw(18) << setprecision(6) << time_arma << " s.";
+        ofile_b << setw(12) << iterations << endl;
     }
-    ofile.close();
+    ofile_b.close();
 }
 
 double max_offdiagonal(int n, mat A, int *k, int *l)

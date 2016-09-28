@@ -12,13 +12,9 @@ using namespace std;
 
 int main()
 {
-    //jacobi_method();
+    // jacobi_method();
 
-    clock_t start = clock();
     interacting();
-    clock_t end = clock();
-    double total_time = (double)(end - start) / CLOCKS_PER_SEC;
-    cout << "Total time (s): " << total_time << endl;
 
     return 0;
 }
