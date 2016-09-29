@@ -10,7 +10,9 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 w_r = ['0.01', '0.5', '1', '5']
-n = ['50', '100', '150', '200', '250', '300', '350']
+#n = ['50', '100', '150', '200', '250', '300', '350']
+#n = ['10', '20', '30', '40', '50', '60', '70', '80', '90', '100', '110', '120', '130', '140', '150', '160', '170', '180', '190', '200']
+n = '350'
 
 def read_rho_wavefunctions(filename):
     infile = open(filename, 'r')
@@ -27,22 +29,21 @@ def read_rho_wavefunctions(filename):
     infile.close()
     return rho, u1, u2, u3
 
-for i in range(0, 7):
-    # Fetching data by a call on read_x_u_v for three different n:
-    rho, u1, u2, u3 = read_rho_wavefunctions('Results_non_interacting_case_' + n[i] + '.txt')
+# Fetching data by a call on read_x_u_v for three different n:
+rho, u1, u2, u3 = read_rho_wavefunctions('Results_non_interacting_case.txt')# + n[i] + '.txt')
 
-    # Plotting commands to look at the wave functions:
-    plt.rcParams.update({'font.size': 12})
-    fig, ax = plt.subplots(1)
-    ax.plot(rho,u1,'r-',label='$\mid u_0(\\rho) \mid^2$')
-    ax.plot(rho,u2,'b-',label='$\mid u_1(\\rho) \mid^2$')
-    ax.plot(rho,u3,'g-',label='$\mid u_2(\\rho) \mid^2$')
-    ax.set_xlabel('Radial coordinate $\\rho$')
-    ax.set_ylabel('Relative radial wavefunction: $\mid u(\\rho) \mid^2$')
-    ax.legend(loc='upper right',fancybox='True')
-    ax.set_title('Relative radial wave function with $n =$ ' + n[i])
-    ax.grid()
-    plt.savefig('Non_interacting_case_' + n[i] + '.pdf')
+# Plotting commands to look at the wave functions:
+plt.rcParams.update({'font.size': 12})
+fig, ax = plt.subplots(1)
+ax.plot(rho,u1,'r-',label='$\mid u_0(\\rho) \mid^2$')
+ax.plot(rho,u2,'b-',label='$\mid u_1(\\rho) \mid^2$')
+ax.plot(rho,u3,'g-',label='$\mid u_2(\\rho) \mid^2$')
+ax.set_xlabel('Radial coordinate $\\rho$')
+ax.set_ylabel('Relative radial wavefunction: $\mid u(\\rho) \mid^2$')
+ax.legend(loc='upper right',fancybox='True')
+ax.set_title('Relative radial wave function with $n =$ ' + n)
+ax.grid()
+plt.savefig('Non_interacting_case.pdf')
 
 for i in range(0, 4):
     # Fetching data by a call on read_x_u_v for three different n:

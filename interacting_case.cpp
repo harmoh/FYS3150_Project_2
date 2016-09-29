@@ -67,12 +67,12 @@ void interacting()
         eigenval = sort(eigenval);
 
         // Print eigenvalues
-        cout << "Eigenvalues for w_r(" << i << ") = " << w_r(i) << " and rho_max(" << i <<
-                ") = " << rho_max(i) << ": " << endl;
-        for(int j = 0; j < 3; j++)
-        {
-            cout << eigenval(j) << endl;
-        }
+//        cout << "Eigenvalues for w_r(" << i << ") = " << w_r(i) << " and rho_max(" << i <<
+//                ") = " << rho_max(i) << ": " << endl;
+//        for(int j = 0; j < 3; j++)
+//        {
+//            cout << eigenval(j) << endl;
+//        }
 
         // Normalizing eigenvectors:
         double norm1 = 0;

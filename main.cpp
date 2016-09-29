@@ -13,7 +13,7 @@ using namespace std;
 
 int main()
 {
-    jacobi_method();
+    //jacobi_method();
     non_interacting();
     interacting();
 
