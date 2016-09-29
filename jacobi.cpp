@@ -68,6 +68,9 @@ void jacobi_method()
         double max_iterations = n*n*n;
         int iterations = 0;
 
+        // Copy the matrix for use with Armadillo
+        mat B = A;
+
         clock_t start_jacobi, finish_jacobi, start_arma, finish_arma;
         start_jacobi = clock();
         double max_diagonal = max_offdiagonal(n-1, A, &k, &l);
@@ -87,11 +90,12 @@ void jacobi_method()
         }
         eigenvalues = sort(eigenvalues);
 
-        // Copy the matrix for use with Armadillo
-        mat B = A;
-
         start_arma = clock();
-        eigenvalues_arma(B);
+        vec eigenval;
+        mat eigenvec;
+
+        eig_sym(eigenval, eigenvec, B);  // find eigenvalues/eigenvectors
+        eigenval = sort(eigenval);
         finish_arma = clock();
         double time_arma = (finish_arma - start_arma)/(double)CLOCKS_PER_SEC;
 
@@ -181,13 +185,4 @@ void rotate(int n, mat &A, mat&R, int k, int l)
         R(i,k) = r_ik * c - r_il * s;
         R(i,l) = r_il * c + r_ik * s;
     }
-}
-
-void eigenvalues_arma(mat &B)
-{
-    vec eigval;
-    mat eigvec;
-
-    eig_sym(eigval, eigvec, B);  // find eigenvalues/eigenvectors
-    eigval = sort(eigval);
 }

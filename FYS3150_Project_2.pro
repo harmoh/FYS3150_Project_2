@@ -8,10 +8,12 @@ LIBS += -L/usr/local/lib
 
 SOURCES += main.cpp \
     jacobi.cpp \
-    interacting_case.cpp
+    interacting_case.cpp \
+    non_interacting_case.cpp
 
 LIBS += -larmadillo -llapack -lblas
 
 HEADERS += \
     jacobi.h \
-    interacting_case.h
+    interacting_case.h \
+    non_interacting_case.h

@@ -3,51 +3,42 @@
 #include <iomanip>
 #include <cmath>
 #include <armadillo>
+#include "non_interacting_case.h"
 
 using namespace std;
 using namespace arma;
-ofstream ofile_d;
+ofstream ofile_plot;
 
-// Main function for finding eigenvalues using Armadillo for the interacting case
-void interacting()
+// Main function for calculating eigenvalues and eigenvectors for the non-interacting case
+void non_interacting()
 {
     // Initial variables
     double rho_min = 0;
-    vec rho_max(4);
-    rho_max(0) = 60.0;
-    rho_max(1) = 8.0;
-    rho_max(2) = 5.0;
-    rho_max(3) = 2.0;
-    vec w_r(4);
-    w_r(0) = 0.01;
-    w_r(1) = 0.5;
-    w_r(2) = 1.0;
-    w_r(3) = 5.0;
+    double rho_max = 5.0;
 
-    //    clock_t start_arma, finish_arma;
-
-    int n = 350;
-    mat A = zeros(n-1, n-1);
-
-    vec rho(n+1);
-    rho(0) = rho_min;
-    vec V(n-1);
-    vec d(n-1);
-
-    // Loop over different w_r values
-    for(int i = 0; i < 4; i++)
+    // Loop over different n-values
+    for(int i = 1; i < 8; i++)
     {
-        double h = (rho_max(i) - rho_min) / n;
+        int n = 50 * i;
+        mat A = zeros(n-1, n-1);
+        mat R(n-1, n-1);
+
+        vec rho(n+1);
+        rho(0) = rho_min;
+        vec V(n-1);
+        vec d(n-1);
+
+        double h = (rho_max - rho_min) / n;
         double e = -1.0/(h*h);
 
         for(int i = 0; i < n+1; i++)
         {
             rho(i) = rho(0) + i * h;
         }
-        for(int j = 0; j < n-1; j++)
+        for(int i = 0; i < n-1; i++)
         {
-            V(j) = w_r(i)*w_r(i) * rho(j+1)*rho(j+1) + 1/rho(j+1); // Interacting case
-            d(j) = 2/(h*h) + V(j);
+            V(i) = rho(i+1) * rho(i+1); // Non-interaction case
+            d(i) = 2/(h*h) + V(i);
         }
 
         // Initialize A
@@ -59,20 +50,21 @@ void interacting()
             A(i+1,i) = e;
         }
 
-        //    start_arma = clock();
+        // Initializing eigenvalue matrix
+        R.eye();
+
+        clock_t start_arma, finish_arma;
+
+        start_arma = clock();
         vec eigenval;
         mat eigenvec;
 
         eig_sym(eigenval, eigenvec, A);  // find eigenvalues/eigenvectors
         eigenval = sort(eigenval);
+        finish_arma = clock();
+        double time_arma = (finish_arma - start_arma)/(double)CLOCKS_PER_SEC;
 
-        // Print eigenvalues
-        cout << "Eigenvalues for w_r(" << i << ") = " << w_r(i) << " and rho_max(" << i <<
-                ") = " << rho_max(i) << ": " << endl;
-        for(int j = 0; j < 3; j++)
-        {
-            cout << eigenval(j) << endl;
-        }
+        cout << "Time: " << time_arma << endl;
 
         // Normalizing eigenvectors:
         double norm1 = 0;
@@ -108,24 +100,26 @@ void interacting()
         u_square_norm3 /= norm3;
 
         // Writing all the normalized results to a txt file. One file for each w_r value.
-        string outfilename = "Results_interacting_case_";
-        stringstream w_r_string;
-        w_r_string << w_r(i);
-        outfilename.append(w_r_string.str());
+        string outfilename = "Results_non_interacting_case_";
+        //stringstream n_string;
+        //n_string << n;
+        //outfilename.append(w_r_string.str());
+        outfilename.append(to_string(n));
         outfilename.append(".txt");
-        ofile_d.open(outfilename);
-        ofile_d << setiosflags(ios::showpoint | ios::uppercase);
-        ofile_d << " rho:               u1:                 u2:                 u3:" << endl;
+        ofile_plot.open(outfilename);
+        ofile_plot << setiosflags(ios::showpoint | ios::uppercase);
+        ofile_plot << " rho:               u1:                 u2:                 u3:" << endl;
         // Loop over all n producing table of time used:
         for (int j = 0; j < n-1; j++) {
             double u_val1 = u_square_norm1(j);
             double u_val2 = u_square_norm2(j);
             double u_val3 = u_square_norm3(j);
-            ofile_d << setw(10) << setprecision(8) << rho(j+1);
-            ofile_d << setw(20) << setprecision(8) << u_val1;
-            ofile_d << setw(20) << setprecision(8) << u_val2;
-            ofile_d << setw(20) << setprecision(8) << u_val3 << endl;
+            ofile_plot << setw(10) << setprecision(8) << rho(j+1);
+            ofile_plot << setw(20) << setprecision(8) << u_val1;
+            ofile_plot << setw(20) << setprecision(8) << u_val2;
+            ofile_plot << setw(20) << setprecision(8) << u_val3 << endl;
         }
-        ofile_d.close();
+        ofile_plot.close();
+
     }
 }
