@@ -113,19 +113,43 @@ void jacobi_method()
 double max_offdiagonal(int n, mat A, int *k, int *l)
 {
     double max = 0;
+    double max_ij = 0;
+    double max_ji = 0;
     double a_ij;
+    double a_ji;
     for(int i = 0; i < n; i++)
     {
         for(int j = i + 1; j < n; j++)
         {
             a_ij = fabs(A(i,j));
-            if(a_ij > max)
+            if(a_ij > max_ij)
             {
-                max = a_ij;
+                max_ij = a_ij;
                 *k = i;
                 *l = j;
             }
         }
+    }
+    for(int j = 0; j < n; j++)
+    {
+        for(int i = j + 1; i < n; i++)
+        {
+            a_ji = fabs(A(i,j));
+            if(a_ji > max_ij)
+            {
+                max_ji = a_ji;
+                *k = i;
+                *l = j;
+            }
+        }
+    }
+    if(max_ij > max_ji)
+    {
+        max = max_ij;
+    }
+    else
+    {
+        max = max_ji;
     }
     return max;
 }

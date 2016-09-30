@@ -35,13 +35,13 @@ rho, u1, u2, u3 = read_rho_wavefunctions('Results_non_interacting_case.txt')# + 
 # Plotting commands to look at the wave functions:
 plt.rcParams.update({'font.size': 12})
 fig, ax = plt.subplots(1)
-ax.plot(rho,u1,'r-',label='$\mid u_0(\\rho) \mid^2$')
-ax.plot(rho,u2,'b-',label='$\mid u_1(\\rho) \mid^2$')
-ax.plot(rho,u3,'g-',label='$\mid u_2(\\rho) \mid^2$')
+ax.set_title('Relative radial wave function with $n =$ ' + n)
 ax.set_xlabel('Radial coordinate $\\rho$')
 ax.set_ylabel('Relative radial wavefunction: $\mid u(\\rho) \mid^2$')
 ax.legend(loc='upper right',fancybox='True')
-ax.set_title('Relative radial wave function with $n =$ ' + n)
+ax.plot(rho,u1,'r-',label='$\mid u_0(\\rho) \mid^2$')
+ax.plot(rho,u2,'b-',label='$\mid u_1(\\rho) \mid^2$')
+ax.plot(rho,u3,'g-',label='$\mid u_2(\\rho) \mid^2$')
 ax.grid()
 plt.savefig('Non_interacting_case.pdf')
 
@@ -52,12 +52,14 @@ for i in range(0, 4):
     # Plotting commands to look at the wave functions:
     plt.rcParams.update({'font.size': 12})
     fig, ax = plt.subplots(1)
-    ax.plot(rho,u1,'r-',label='$\mid u_0(\\rho) \mid^2$')
-    ax.plot(rho,u2,'b-',label='$\mid u_1(\\rho) \mid^2$')
-    ax.plot(rho,u3,'g-',label='$\mid u_2(\\rho) \mid^2$')
+    ax.set_title('Relative radial wave function with $\omega_r =$ ' + w_r[i])
     ax.set_xlabel('Radial coordinate $\\rho$')
     ax.set_ylabel('Relative radial wavefunction: $\mid u(\\rho) \mid^2$')
     ax.legend(loc='upper right',fancybox='True')
-    ax.set_title('Relative radial wave function with $\omega_r =$ ' + w_r[i])
+    ax.plot(rho,u1,'r-',label='$\mid u_0(\\rho) \mid^2$')
+    ax.plot(rho,u2,'b-',label='$\mid u_1(\\rho) \mid^2$')
+    ax.plot(rho,u3,'g-',label='$\mid u_2(\\rho) \mid^2$')
     ax.grid()
     plt.savefig('Interacting_case_' + w_r[i] + '.pdf')
+
+

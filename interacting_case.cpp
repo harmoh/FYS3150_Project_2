@@ -3,6 +3,7 @@
 #include <iomanip>
 #include <cmath>
 #include <armadillo>
+#include "interacting_case.h"
 
 using namespace std;
 using namespace arma;
@@ -14,7 +15,7 @@ void interacting()
     // Initial variables
     double rho_min = 0;
     vec rho_max(4);
-    rho_max(0) = 60.0;
+    rho_max(0) = 50.0;
     rho_max(1) = 8.0;
     rho_max(2) = 5.0;
     rho_max(3) = 2.0;
@@ -23,8 +24,6 @@ void interacting()
     w_r(1) = 0.5;
     w_r(2) = 1.0;
     w_r(3) = 5.0;
-
-    //    clock_t start_arma, finish_arma;
 
     int n = 350;
     mat A = zeros(n-1, n-1);
@@ -65,14 +64,6 @@ void interacting()
 
         eig_sym(eigenval, eigenvec, A);  // find eigenvalues/eigenvectors
         eigenval = sort(eigenval);
-
-        // Print eigenvalues
-//        cout << "Eigenvalues for w_r(" << i << ") = " << w_r(i) << " and rho_max(" << i <<
-//                ") = " << rho_max(i) << ": " << endl;
-//        for(int j = 0; j < 3; j++)
-//        {
-//            cout << eigenval(j) << endl;
-//        }
 
         // Normalizing eigenvectors:
         double norm1 = 0;

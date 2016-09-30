@@ -18,7 +18,6 @@ void non_interacting()
 
     int n = 350;
     mat A = zeros(n-1, n-1);
-    mat R(n-1, n-1);
 
     vec rho(n+1);
     rho(0) = rho_min;
@@ -47,21 +46,11 @@ void non_interacting()
         A(i+1,i) = e;
     }
 
-    // Initializing eigenvalue matrix
-    R.eye();
-
-    clock_t start_arma, finish_arma;
-
-    start_arma = clock();
     vec eigenval;
     mat eigenvec;
 
     eig_sym(eigenval, eigenvec, A);  // find eigenvalues/eigenvectors
     eigenval = sort(eigenval);
-    finish_arma = clock();
-    double time_arma = (finish_arma - start_arma)/(double)CLOCKS_PER_SEC;
-
-    cout << "Time: " << time_arma << endl;
 
     // Normalizing eigenvectors:
     double norm1 = 0;
