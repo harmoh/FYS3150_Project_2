@@ -8,13 +8,12 @@ using namespace arma;
 void test()
 {
     // Unit test
-    // Create and initialze a nxn test matrix
+    // Create and initialze a nxn tridiagonal matrix with random values
     int n = 6;
     int k = 0;
     int l = 0;
     mat A = zeros(n-1, n-1);
     double d_n = rand();
-
     A(n-2, n-2) = d_n;
     double max_temp = 0;
     for(int i = 0; i < n-2; i++)
@@ -37,6 +36,7 @@ void test()
     }
     double max = max_offdiagonal(n-1, A, &k, &l);
 
+    cout << "Unit test 1: ";
     if(is_equal(max, max_temp))
     {
         cout << "Success! The max offdiagonal function works." << endl;

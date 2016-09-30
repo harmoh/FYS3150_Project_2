@@ -15,12 +15,16 @@ using namespace arma;
 
 int main()
 {
-    //jacobi_method();
+    cout << "Performing Jacobi rotation..." << endl;
+    jacobi_method();
 
+    cout << "Unit testing..." << endl;
     test();
 
+    cout << "Non-interacting and interacting...";
     non_interacting();
     interacting();
+    cout << "Finished!" << endl;
 
     return 0;
 }
