@@ -2,7 +2,7 @@
 
 import os
 
-os.system('c++ main.cpp jacobi.cpp non_interacting_case.cpp interacting_case.cpp -o main.o -O2 -I /Users/harald/Documents/GitHub/QtProjects/FYS3150_Project_2\ /usr/local/include -L/usr/local/lib -larmadillo -lblas -llapack')
+os.system('c++ main.cpp jacobi.cpp non_interacting_case.cpp interacting_case.cpp unit_test.cpp -o main.o -O2 -I /Users/harald/Documents/GitHub/QtProjects/FYS3150_Project_2\ /usr/local/include -L/usr/local/lib -larmadillo -lblas -llapack')
 os.system('./main.o')
 
 from math import *
@@ -10,8 +10,6 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 w_r = ['0.01', '0.5', '1', '5']
-#n = ['50', '100', '150', '200', '250', '300', '350']
-#n = ['10', '20', '30', '40', '50', '60', '70', '80', '90', '100', '110', '120', '130', '140', '150', '160', '170', '180', '190', '200']
 n = '350'
 
 def read_rho_wavefunctions(filename):
@@ -38,10 +36,10 @@ fig, ax = plt.subplots(1)
 ax.set_title('Relative radial wave function with $n =$ ' + n)
 ax.set_xlabel('Radial coordinate $\\rho$')
 ax.set_ylabel('Relative radial wavefunction: $\mid u(\\rho) \mid^2$')
-ax.legend(loc='upper right',fancybox='True')
 ax.plot(rho,u1,'r-',label='$\mid u_0(\\rho) \mid^2$')
 ax.plot(rho,u2,'b-',label='$\mid u_1(\\rho) \mid^2$')
 ax.plot(rho,u3,'g-',label='$\mid u_2(\\rho) \mid^2$')
+ax.legend(loc='upper right',fancybox='True')
 ax.grid()
 plt.savefig('Non_interacting_case.pdf')
 
@@ -55,10 +53,10 @@ for i in range(0, 4):
     ax.set_title('Relative radial wave function with $\omega_r =$ ' + w_r[i])
     ax.set_xlabel('Radial coordinate $\\rho$')
     ax.set_ylabel('Relative radial wavefunction: $\mid u(\\rho) \mid^2$')
-    ax.legend(loc='upper right',fancybox='True')
     ax.plot(rho,u1,'r-',label='$\mid u_0(\\rho) \mid^2$')
     ax.plot(rho,u2,'b-',label='$\mid u_1(\\rho) \mid^2$')
     ax.plot(rho,u3,'g-',label='$\mid u_2(\\rho) \mid^2$')
+    ax.legend(loc='upper right',fancybox='True')
     ax.grid()
     plt.savefig('Interacting_case_' + w_r[i] + '.pdf')
 
