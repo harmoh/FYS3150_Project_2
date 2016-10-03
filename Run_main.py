@@ -59,5 +59,3 @@ for i in range(0, 4):
     ax.legend(loc='upper right',fancybox='True')
     ax.grid()
     plt.savefig('Interacting_case_' + w_r[i] + '.pdf')
-
-
