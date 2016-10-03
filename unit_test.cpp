@@ -5,6 +5,7 @@
 using namespace std;
 using namespace arma;
 
+// Check if "max_offdiagonal()" finds the highest offdiagonal values
 void test()
 {
     // Unit test
@@ -47,6 +48,7 @@ void test()
     }
 }
 
+// Check that two double are equal
 bool is_equal(double a, double b)
 {
     double epsilon = 1e-8;

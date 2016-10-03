@@ -59,7 +59,7 @@ void jacobi_method()
             A(i+1,i) = e;
         }
 
-        // Initializing eigenvalue matrix
+        // Initializing eigenvector matrix
         R.eye();
 
         int k = 0;
@@ -94,7 +94,7 @@ void jacobi_method()
         vec eigenval;
         mat eigenvec;
 
-        eig_sym(eigenval, eigenvec, B);  // find eigenvalues/eigenvectors
+        eig_sym(eigenval, eigenvec, B);  // Find eigenvalues/eigenvectors using Armadillo
         eigenval = sort(eigenval);
         finish_arma = clock();
         double time_arma = (finish_arma - start_arma)/(double)CLOCKS_PER_SEC;
