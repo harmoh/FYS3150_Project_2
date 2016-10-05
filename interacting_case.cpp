@@ -16,7 +16,7 @@ void interacting()
     double rho_min = 0;
     vec rho_max(4);
     rho_max(0) = 50.0;
-    rho_max(1) = 8.0;
+    rho_max(1) = 7.0;
     rho_max(2) = 5.0;
     rho_max(3) = 2.0;
     vec w_r(4);
@@ -106,7 +106,8 @@ void interacting()
         outfilename.append(".txt");
         ofile_d.open(outfilename);
         ofile_d << setiosflags(ios::showpoint | ios::uppercase);
-        ofile_d << " rho:               u1:                 u2:                 u3:" << endl;
+        ofile_d << " rho:               u1:                 u2:                 u3:" <<
+                   "            Ground state eigenvalue: " << eigenval(0) << endl;
         // Loop over all n producing table of time used:
         for (int j = 0; j < n-1; j++) {
             double u_val1 = u_square_norm1(j);

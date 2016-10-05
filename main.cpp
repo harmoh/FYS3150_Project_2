@@ -18,7 +18,7 @@ int main()
     //jacobi_method();
 
     test_max_off();
-    test_orthogonal();
+    test_non_empty();
 
     non_interacting();
     interacting();

@@ -40,16 +40,16 @@ void test_max_off()
     cout << "Unit test 1: ";
     if(is_equal(max, max_temp))
     {
-        cout << "Success! The max offdiagonal function works." << endl;
+        cout << "Success! The max offdiagonal function returns the maximum value." << endl;
     }
     else
     {
-        cout << "Not correct value." << endl;
+        cout << "Not correct value from the offdiagonal function." << endl;
     }
 }
 
-// Initialize same matrix A as in the Jacobi method and check orthogonality
-void test_orthogonal()
+// Initialize same matrix A as in the Jacobi method and check that diagonal values are not zero
+void test_non_empty()
 {
     // Initial variables
     double rho_min = 0;
@@ -85,10 +85,23 @@ void test_orthogonal()
         A(i+1,i) = e;
     }
 
-    cout << "A:\n" << A << endl;
-    cout << "det(A):\n" << det(A) << endl;
-    cout << "At * A:\n" << A.t() * A << endl;
-    cout << "A * At:\n" << A * A.t() << endl;
+    cout << "Unit test 2: ";
+    bool non_empty = true;
+    for(int i = 0; i < n-2; i++)
+    {
+        if(is_equal(A(i,i), 0))
+        {
+            non_empty = false;
+        }
+    }
+    if(non_empty)
+    {
+        cout << "Success! The diagonal values of matrix A are not empty." << endl;
+    }
+    else
+    {
+        cout << "Error! The diagonal values of matrix A are not empty." << endl;
+    }
 }
 
 // Check that two double values are equal
