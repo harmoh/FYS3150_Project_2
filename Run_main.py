@@ -2,7 +2,7 @@
 
 import os
 
-os.system('c++ main.cpp jacobi.cpp non_interacting_case.cpp interacting_case.cpp unit_test.cpp -o main.o -O2 -I /Users/harald/Documents/GitHub/QtProjects/FYS3150_Project_2\ /usr/local/include -L/usr/local/lib -larmadillo -lblas -llapack')
+os.system('c++ main.cpp jacobi.cpp non_interacting_case.cpp interacting_case.cpp unit_test.cpp -o main.o -O2 -I /usr/local/Cellar/armadillo/7.400.2/include -DARMA_DONT_USE_WRAPPER -lblas -llapack')
 os.system('./main.o')
 
 from math import *
