@@ -58,7 +58,6 @@ void interacting()
             A(i+1,i) = e;
         }
 
-        //    start_arma = clock();
         vec eigenval;
         mat eigenvec;
 
@@ -108,6 +107,7 @@ void interacting()
         ofile_d << setiosflags(ios::showpoint | ios::uppercase);
         ofile_d << " rho:               u1:                 u2:                 u3:" <<
                    "            Ground state eigenvalue: " << eigenval(0) << endl;
+
         // Loop over all n producing table of time used:
         for (int j = 0; j < n-1; j++) {
             double u_val1 = u_square_norm1(j);

@@ -9,7 +9,8 @@ using namespace std;
 using namespace arma;
 ofstream ofile_plot;
 
-// Main function for calculating eigenvalues and eigenvectors for the non-interacting case
+// Main function for calculating eigenvalues and eigenvectors for the
+// non-interacting case using Armadillo library
 void non_interacting()
 {
     // Initial variables
@@ -49,7 +50,7 @@ void non_interacting()
     vec eigenval;
     mat eigenvec;
 
-    eig_sym(eigenval, eigenvec, A);  // find eigenvalues/eigenvectors
+    eig_sym(eigenval, eigenvec, A);  // Find eigenvalues/eigenvectors using Armadillo
     eigenval = sort(eigenval);
 
     // Normalizing eigenvectors:
@@ -92,6 +93,7 @@ void non_interacting()
     ofile_plot.open(outfilename);
     ofile_plot << setiosflags(ios::showpoint | ios::uppercase);
     ofile_plot << " rho:               u1:                 u2:                 u3:" << endl;
+
     // Loop over all n producing table of time used:
     for (int j = 0; j < n-1; j++) {
         double u_val1 = u_square_norm1(j);

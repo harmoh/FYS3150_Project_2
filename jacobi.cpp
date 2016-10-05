@@ -71,8 +71,7 @@ void jacobi_method()
         // Copy the matrix for use with Armadillo
         mat B = A;
 
-        clock_t start_jacobi, finish_jacobi, start_arma, finish_arma;
-        start_jacobi = clock();
+        clock_t start_jacobi = clock();
         double max_diagonal = max_offdiagonal(n-1, A, &k, &l);
         while(max_diagonal > epsilon && iterations < max_iterations)
         {
@@ -80,7 +79,7 @@ void jacobi_method()
             rotate(n-1, A, R, k, l);
             iterations++;
         }
-        finish_jacobi = clock();
+        clock_t finish_jacobi = clock();
         double time_jacobi = (finish_jacobi - start_jacobi)/(double)CLOCKS_PER_SEC;
 
         vec eigenvalues(n-1);
@@ -90,13 +89,13 @@ void jacobi_method()
         }
         eigenvalues = sort(eigenvalues);
 
-        start_arma = clock();
+        clock_t start_arma = clock();
         vec eigenval;
         mat eigenvec;
 
         eig_sym(eigenval, eigenvec, B);  // Find eigenvalues/eigenvectors using Armadillo
         eigenval = sort(eigenval);
-        finish_arma = clock();
+        clock_t finish_arma = clock();
         double time_arma = (finish_arma - start_arma)/(double)CLOCKS_PER_SEC;
 
         ofile_b << setw(5) << n << setw(5);
@@ -110,6 +109,7 @@ void jacobi_method()
     ofile_b.close();
 }
 
+// Finds the maximum offdiagonal value
 double max_offdiagonal(int n, mat A, int *k, int *l)
 {
     double max = 0;
@@ -133,6 +133,7 @@ double max_offdiagonal(int n, mat A, int *k, int *l)
     return max;
 }
 
+// Performs Jacobi rotation
 void rotate(int n, mat &A, mat&R, int k, int l)
 {
     double s, c, t, tau;;

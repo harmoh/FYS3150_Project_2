@@ -8,7 +8,6 @@ using namespace arma;
 // Check if "max_offdiagonal()" finds the highest offdiagonal values
 void test_max_off()
 {
-    // Unit test
     // Create and initialze a nxn tridiagonal matrix with random values
     int n = 6;
     int k = 0;
@@ -48,7 +47,7 @@ void test_max_off()
     }
 }
 
-// Initialize same matrix A as in the Jacobi method and check that diagonal values are not zero
+// Initialize same matrix A as in the Jacobi method and check that all diagonal values are not zero
 void test_non_empty()
 {
     // Initial variables
@@ -85,7 +84,7 @@ void test_non_empty()
         A(i+1,i) = e;
     }
 
-    cout << "Unit test 2: ";
+    // Check diagonal elements
     bool non_empty = true;
     for(int i = 0; i < n-2; i++)
     {
@@ -94,6 +93,8 @@ void test_non_empty()
             non_empty = false;
         }
     }
+
+    cout << "Unit test 2: ";
     if(non_empty)
     {
         cout << "Success! The diagonal values of matrix A are not empty." << endl;
@@ -104,7 +105,7 @@ void test_non_empty()
     }
 }
 
-// Check that two double values are equal
+// Check that two double values are equal with a presicion of 1e-8
 bool is_equal(double a, double b)
 {
     double epsilon = 1e-8;
