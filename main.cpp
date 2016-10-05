@@ -15,7 +15,7 @@ using namespace arma;
 
 int main()
 {
-    //jacobi_method();
+    jacobi_method();
 
     test_max_off();
     test_non_empty();
